@@ -1,43 +1,42 @@
 import React, { useEffect } from 'react'
 import { CRow, CCol, CButton, CTable, CContainer } from '@coreui/react'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-const products = [
-  {
-    _id: 1,
-    name: 'Product 1',
-    price: '$1.99',
-    category: 'electronics',
-    brand: 'apple',
-  },
-  {
-    _id: 2,
-    name: 'Product 2',
-    price: '$1.99',
-    category: 'electronics',
-    brand: 'apple',
-  },
-]
 function Announcement() {
+  const navigate = useNavigate()
   const [announcements, setAnnouncements] = React.useState([])
-  const createProductHandle = async () => {
-    console.log('create product')
 
-    const res = await axios.post('/announcement', {
-      heading: 'Frontend Ann',
-      content: 'This is frontend Ann',
+  //functions
+  const createProductHandle = async () => {
+    const { data } = await axios.post('/announcement', {
+      heading: 'Default',
+      content: 'Default',
     })
-    console.log(res)
+    if (!data) return console.log('error')
+    navigate(`/admin/announcement/edit/${data._id}`)
   }
-  const deleteHandle = () => {
-    console.log('deleteHandle')
+  const deleteHandle = async (id) => {
+    try {
+      const { data } = await axios.delete(`/announcement/${id}`)
+
+      if (!data) throw new Error('user not found')
+
+      // setErr({ variant: 'success', msg: 'Product Deleted' })
+
+      window.location.reload()
+    } catch (error) {
+      // setErr({ variant: 'danger', msg: error.message })
+      console.log(error)
+    }
   }
   const fetchAnnouncements = async () => {
     const { data } = await axios.get('/announcement')
-    console.log(data)
+
     setAnnouncements(...announcements, data)
   }
+
   useEffect(() => {
     fetchAnnouncements()
   }, [])
@@ -75,11 +74,19 @@ function Announcement() {
               <td>{announcement.content}</td>
               <td>
                 {/* <Link to={`/announcement/${product._id}`}> */}
-                <CButton className="my-3" onClick={deleteHandle}>
+                <CButton
+                  className="my-3"
+                  onClick={() => deleteHandle(announcement._id)}
+                >
                   <i className="fas fa-trash"> Delete</i>
                 </CButton>
                 {/* </Link> */}
-                <CButton className="my-3" onClick={deleteHandle}>
+                <CButton
+                  className="my-3"
+                  onClick={() => {
+                    navigate(`/admin/announcement/edit/${announcement._id}`)
+                  }}
+                >
                   <i className="fas fa-edit"> Edit</i>
                 </CButton>
               </td>
