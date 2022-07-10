@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { CCol, CContainer, CRow } from "@coreui/react";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
@@ -22,6 +23,31 @@ function App() {
       </CRow>
     </CContainer>
   );
+=======
+import logo from './logo.svg'
+import './App.css'
+import { CContainer } from '@coreui/react'
+import '@coreui/coreui/dist/css/coreui.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Announcement from './Screens/Announcement'
+import { Routes, Route } from 'react-router-dom'
+import { AnnouncementUpdate } from './Screens'
+
+function App() {
+  return (
+    <>
+      <CContainer fluid>
+        <Routes>
+          <Route path="/admin/announcement" element={<Announcement />} />
+          <Route
+            path="/admin/announcement/edit/:id"
+            element={<AnnouncementUpdate />}
+          />
+        </Routes>
+      </CContainer>
+    </>
+  )
+>>>>>>> 3b7466703d14beff7c40b5fc11044a347029863f
 }
 
-export default App;
+export default App
