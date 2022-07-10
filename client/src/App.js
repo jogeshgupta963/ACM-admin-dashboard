@@ -1,14 +1,26 @@
-import logo from "./logo.svg";
+import { CCol, CContainer, CRow } from "@coreui/react";
 import "./App.css";
-import { CContainer } from "@coreui/react";
-import "@coreui/coreui/dist/css/coreui.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
+import Sidebar from "./components/Sidebar";
+import Header from "./components/Header";
+import Main from "./components/Main";
 
 function App() {
   return (
-    <>
-      <CContainer>Container</CContainer>
-    </>
+    <CContainer fluid className="p-0 m-0">
+      <CRow>
+        <CCol md={4} lg={3} className="sidebar-container px-0">
+          <Sidebar />
+        </CCol>
+        <CCol md={8} lg={9} xs={12} className="wrapper-container">
+          <CRow className="header-container">
+            <Header />
+          </CRow>
+          <CRow className="main-container px-2">
+            <Main />
+          </CRow>
+        </CCol>
+      </CRow>
+    </CContainer>
   );
 }
 
