@@ -1,13 +1,22 @@
-import logo from "./logo.svg";
-import "./App.css";
-import "@coreui/coreui/dist/css/coreui.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Announcement from "./Screens/Announcement";
-import Header from "./components/Header";
-import Sidebar from "./components/Sidebar";
-import { Routes, Route } from "react-router-dom";
-import { AnnouncementUpdate } from "./Screens";
-import { CContainer, CRow, CCol } from "@coreui/react";
+import logo from './logo.svg'
+import './App.css'
+import '@coreui/coreui/dist/css/coreui.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Announcement from './Screens/Announcement'
+import Header from './components/Header'
+import Sidebar from './components/Sidebar'
+import { Routes, Route } from 'react-router-dom'
+import {
+  AnnouncementUpdate,
+  BadgeEdit,
+  Badges,
+  Certificates,
+  UserEdit,
+  Users,
+  Video,
+  VideoEdit,
+} from './Screens'
+import { CContainer, CRow, CCol } from '@coreui/react'
 
 function App() {
   return (
@@ -23,13 +32,21 @@ function App() {
                   path="/admin/announcement/edit/:id"
                   element={<AnnouncementUpdate />}
                 />
+                <Route path="/admin/badges" element={<Badges />} />
+                <Route path="/admin/badge/edit/:id" element={<BadgeEdit />} />
+
+                <Route path="/admin/videos" element={<Video />} />
+                <Route path="/admin/video/edit/:id" element={<VideoEdit />} />
+                <Route path="/admin/users" element={<Users />} />
+                <Route path="/admin/user/edit/:id" element={<UserEdit />} />
+                <Route path="/admin/certificates" element={<Certificates />} />
               </Routes>
             </CRow>
           </CCol>
         </CRow>
       </CContainer>
     </>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -18,58 +18,59 @@ import Header from '../components/Header'
 import '../index.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { useState } from 'react'
 
-function Announcement() {
+function Video() {
+  //hooks
   const navigate = useNavigate()
-  const [announcements, setAnnouncements] = React.useState([])
+  const [videos, setVideos] = useState([])
 
   //functions
-  const createAnnouncementHandle = async () => {
-    const { data } = await axios.post('/announcement', {
-      heading: 'Default',
-      content: 'Default',
-    })
-    if (!data) return console.log('error')
-    navigate(`/admin/announcement/edit/${data._id}`)
+  const fetchVideos = async () => {
+    try {
+      const { data } = await axios.get('/video')
+      setVideos(...videos, data)
+    } catch (err) {
+      console.log(err.message)
+    }
   }
   const deleteHandle = async (id) => {
     try {
-      const { data } = await axios.delete(`/announcement/${id}`)
+      const { data } = await axios.delete(`/video/${id}`)
 
-      if (!data) throw new Error('user not found')
-
-      // setErr({ variant: 'success', msg: 'Product Deleted' })
-
+      if (!data) return console.log('error')
       window.location.reload()
-    } catch (error) {
-      // setErr({ variant: 'danger', msg: error.message })
-      console.log(error)
+    } catch (err) {
+      console.log(err.message)
     }
   }
-  const fetchAnnouncements = async () => {
-    const { data } = await axios.get('/announcement')
-
-    setAnnouncements(...announcements, data)
+  const createVideoHandle = async () => {
+    try {
+      const { data } = await axios.post('/video', {
+        url: 'default',
+        description: 'Default',
+        title: 'Default',
+      })
+      if (!data) throw new Error('badge not found')
+      navigate(`/admin/video/edit/${data._id}`)
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   useEffect(() => {
-    fetchAnnouncements()
+    fetchVideos()
   }, [])
-
   return (
     <CContainer>
       <CRow className="align-items-center">
         <CCol xs="12">
-          <Header text="Announcement" />
+          <Header text="Videos" />
         </CCol>
         <CCol style={{ textAlign: 'right' }}>
-          <CButton
-            className="my-3"
-            color="primary"
-            onClick={createAnnouncementHandle}
-          >
+          <CButton className="my-3" color="primary" onClick={createVideoHandle}>
             <FontAwesomeIcon icon={faPlus} className="px-1" />
-            Create Announcement
+            Create Video
           </CButton>
         </CCol>
       </CRow>
@@ -85,27 +86,28 @@ function Announcement() {
             style={{ backgroundColor: 'rgba(85, 150, 230, 1)', color: 'white' }}
           >
             <CTableHeaderCell>Id</CTableHeaderCell>
-            <CTableHeaderCell>Heading</CTableHeaderCell>
-            <CTableHeaderCell>Type</CTableHeaderCell>
-            <CTableHeaderCell>Year</CTableHeaderCell>
-            <CTableHeaderCell>Content</CTableHeaderCell>
+            <CTableHeaderCell>URL</CTableHeaderCell>
+            <CTableHeaderCell>Description</CTableHeaderCell>
+            <CTableHeaderCell>Title</CTableHeaderCell>
+            <CTableHeaderCell>Date</CTableHeaderCell>
             <CTableHeaderCell></CTableHeaderCell>
           </CTableRow>
         </CTableHead>
         <CTableBody color="light">
-          {announcements.map((announcement) => (
-            <CTableRow key={announcement._id}>
-              <CTableDataCell>{announcement._id}</CTableDataCell>
-              <CTableDataCell>{announcement.heading}</CTableDataCell>
-              <CTableDataCell>{announcement.type}</CTableDataCell>
-              <CTableDataCell>{announcement.year}</CTableDataCell>
-              <CTableDataCell>{announcement.content}</CTableDataCell>
+          {videos.map((video) => (
+            <CTableRow key={video._id}>
+              <CTableDataCell>{video._id}</CTableDataCell>
+              <CTableDataCell>{video.title}</CTableDataCell>
+              <CTableDataCell>{video.description}</CTableDataCell>
+              <CTableDataCell>{video.url}</CTableDataCell>
+              <CTableDataCell>{video.date}</CTableDataCell>
+
               <CTableDataCell>
                 <CContainer className="announcement-btn-container">
                   <CButton
                     className="my-3"
                     color="danger"
-                    onClick={() => deleteHandle(announcement._id)}
+                    onClick={() => deleteHandle(video._id)}
                   >
                     <FontAwesomeIcon icon={faTrash} />
                   </CButton>
@@ -114,9 +116,7 @@ function Announcement() {
                     color="success"
                     className="my-3"
                     onClick={() => {
-                      navigate(
-                        `/admin/announcement/edit/${announcement._id}?edit=true`,
-                      )
+                      navigate(`/admin/video/edit/${video._id}?edit=true`)
                     }}
                   >
                     <FontAwesomeIcon icon={faEdit} />
@@ -131,4 +131,4 @@ function Announcement() {
   )
 }
 
-export default Announcement
+export default Video
