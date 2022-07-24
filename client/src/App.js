@@ -10,6 +10,7 @@ import {
   AnnouncementUpdate,
   BadgeEdit,
   Badges,
+  CertificateEdit,
   Certificates,
   UserEdit,
   Users,
@@ -40,6 +41,10 @@ function App() {
                 <Route path="/admin/users" element={<Users />} />
                 <Route path="/admin/user/edit/:id" element={<UserEdit />} />
                 <Route path="/admin/certificates" element={<Certificates />} />
+                <Route
+                  path="/admin/certificate/edit/:id"
+                  element={<CertificateEdit />}
+                />
               </Routes>
             </CRow>
           </CCol>

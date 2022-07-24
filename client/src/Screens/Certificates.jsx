@@ -34,7 +34,7 @@ function Certificates() {
   const [certificates, setCertificates] = useState([])
 
   //functions
-  const fetchBadges = async () => {
+  const fetchCertificates = async () => {
     try {
       const { data } = await axios.get('/certificate')
       setCertificates(...certificates, data)
@@ -44,29 +44,43 @@ function Certificates() {
   }
   const deleteHandle = async (id) => {
     try {
-      const { data } = await axios.delete(`/badge/${id}`)
+      const { data } = await axios.delete(`/certificate/${id}`)
       if (!data) return console.log('error')
       window.location.reload()
     } catch (err) {
       console.log(err.message)
     }
   }
-  const createBadgeHandle = async () => {
+  const removeUser = async (certificate_id, selectedUser) => {
     try {
-      const { data } = await axios.post('/badge', {
-        name: 'Default',
-        description: 'Default',
-        url: 'default',
+      console.log(selectedUser)
+      const { data } = await axios.post(
+        `/certificate/remove/${certificate_id}`,
+        {
+          user: selectedUser,
+        },
+      )
+      if (!data) return console.log('error')
+      window.location.reload()
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+  const createCertificateHandle = async () => {
+    try {
+      const { data } = await axios.post('/certificate', {
+        url: 'Default',
+        title: 'Default',
       })
-      if (!data) throw new Error('badge not found')
-      navigate(`/admin/badge/edit/${data._id}`)
+      if (!data) throw new Error('certificate not found')
+      navigate(`/admin/certificate/edit/${data._id}`)
     } catch (err) {
       console.log(err.message)
     }
   }
 
   useEffect(() => {
-    fetchBadges()
+    fetchCertificates()
   }, [])
   return (
     <CContainer>
@@ -75,7 +89,11 @@ function Certificates() {
           <Header text="Certificates" />
         </CCol>
         <CCol style={{ textAlign: 'right' }}>
-          <CButton className="my-3" color="primary" onClick={createBadgeHandle}>
+          <CButton
+            className="my-3"
+            color="primary"
+            onClick={createCertificateHandle}
+          >
             <FontAwesomeIcon icon={faPlus} className="px-1" />
             Create Certificate
           </CButton>
@@ -107,13 +125,13 @@ function Certificates() {
               <CTableDataCell>{certificate.url}</CTableDataCell>
               <CTableDataCell>
                 <CContainer className="announcement-btn-container">
-                  {/* <CRow>
-                    <BadgeModal badge={certificate}>
+                  <CRow>
+                    <BadgeModal badge={certificate} removeUser={removeUser}>
                       <CButton className="my-3" color="danger">
                         <FontAwesomeIcon icon={faUser} />
                       </CButton>
                     </BadgeModal>
-                  </CRow> */}
+                  </CRow>
                   <CRow>
                     <CCol>
                       <CButton
@@ -130,7 +148,7 @@ function Certificates() {
                         className="my-3"
                         onClick={() => {
                           navigate(
-                            `/admin/badge/edit/${certificates._id}?edit=true`,
+                            `/admin/certificate/edit/${certificate._id}?edit=true`,
                           )
                         }}
                       >

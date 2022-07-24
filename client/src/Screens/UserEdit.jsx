@@ -16,23 +16,46 @@ import {
   CFormInput,
   CInputGroup,
   CInputGroupText,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownItem,
-  CDropdownDivider,
 } from '@coreui/react'
 
 function UserEdit() {
   //function
+
+  //hooks
+  const navigate = useNavigate()
+  const [isEdit] = useSearchParams()
+  const { id } = useParams()
+
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [department, setDepartment] = useState('')
+  const [admin, setAdmin] = useState(true)
+  useEffect(() => {
+    fetchUser()
+  })
+  const fetchUser = async () => {
+    try {
+      const { data } = await axios.get(`/auth/user/${id}`)
+
+      if (!data) throw new Error('user not found')
+      setName(data.name)
+      setEmail(data.email)
+      setDepartment(data.department)
+      setAdmin(data.isAdmin)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   const submitHandle = async (e) => {
     e.preventDefault()
     try {
+      console.log(name, email, department, admin)
       const { data } = await axios.put(`/auth/user/${id}`, {
-        name: name.current.value || undefined,
-        email: email.current.value || undefined,
-        department: department.current.value || undefined,
-        isAdmin: isAdmin.current.value || false,
+        name: name || undefined,
+        email: email || undefined,
+        department: department || undefined,
+        isAdmin: admin || false,
       })
       if (!data) return console.log('error')
       navigate('/admin/users')
@@ -40,16 +63,6 @@ function UserEdit() {
       console.log(err.message)
     }
   }
-
-  //hooks
-  const navigate = useNavigate()
-  const [isEdit] = useSearchParams()
-  const { id } = useParams()
-  const name = useRef('')
-  const email = useRef('')
-  const department = useRef('')
-  const isAdmin = useRef()
-
   return (
     <CContainer>
       <CRow className="justify-content-md-center">
@@ -63,7 +76,8 @@ function UserEdit() {
                 Name
               </CInputGroupText>
               <CFormInput
-                ref={name}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
               />
@@ -74,7 +88,8 @@ function UserEdit() {
                 Email
               </CInputGroupText>
               <CFormInput
-                ref={email}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
               />
@@ -85,22 +100,25 @@ function UserEdit() {
                 Department
               </CInputGroupText>
               <CFormInput
-                ref={department}
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
               />
             </CInputGroup>
 
-            <CInputGroup className="mb-3">
-              <CInputGroupText id="inputGroup-sizing-default">
-                Admin
-              </CInputGroupText>
-              <CFormInput
-                ref={isAdmin}
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
-              />
-            </CInputGroup>
+            {/* <CInputGroup className="mb-3"> */}
+            <label id="inputGroup-sizing-default">Admin</label>
+
+            <input
+              type="checkbox"
+              className="ms-4 form-check-input"
+              checked
+              onChange={(e) => {
+                setAdmin(!admin)
+              }}
+            />
+            {/* </CInputGroup> */}
 
             <CButton onClick={submitHandle} color="primary" type="submit">
               {isEdit.get('edit') ? 'Update' : 'Create'}

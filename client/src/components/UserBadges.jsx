@@ -26,7 +26,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import React, { useState } from 'react'
 
-function BadgeModal({ children, badge, removeUser }) {
+function UserBadges({ children, type = 'Badges', user, removeUser }) {
   const [visible, setVisible] = useState(false)
   const [selectedUser, setSelectedUser] = useState([])
 
@@ -40,7 +40,7 @@ function BadgeModal({ children, badge, removeUser }) {
       >
         <CModalHeader onClose={() => setVisible(false)}>
           <CModalTitle style={{ width: '100%' }} className="text-center">
-            {badge.badge}
+            {user.name}
           </CModalTitle>
         </CModalHeader>
         <CModalBody>
@@ -48,10 +48,10 @@ function BadgeModal({ children, badge, removeUser }) {
             <CButton
               className="my-3"
               color="danger"
-              onClick={() => removeUser(badge._id, selectedUser)}
+              onClick={() => removeUser(user._id, selectedUser)}
             >
               <FontAwesomeIcon icon={faMinus} className="px-1" />
-              Remove Users
+              Remove {type}
             </CButton>
             <CTable
               striped
@@ -69,37 +69,39 @@ function BadgeModal({ children, badge, removeUser }) {
                 >
                   <CTableHeaderCell></CTableHeaderCell>
                   <CTableHeaderCell>Name</CTableHeaderCell>
-                  <CTableHeaderCell>Email</CTableHeaderCell>
+                  <CTableHeaderCell>Url</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody color="light">
-                {badge.user.map((user) => (
-                  <CTableRow key={user._id}>
+                {user[type.toLowerCase()].map((badge) => (
+                  <CTableRow key={badge._id}>
                     <CTableDataCell>
                       <input
                         type="checkbox"
                         onClick={() => {
-                          if (selectedUser.includes(user._id)) {
+                          if (selectedUser.includes(badge._id)) {
                             setSelectedUser(
-                              selectedUser.filter((id) => id !== user._id),
+                              selectedUser.filter((id) => id !== badge._id),
                             )
                             return
                           }
                           setSelectedUser([
                             ...selectedUser,
-                            user._id.toString(),
+                            badge._id.toString(),
                           ])
                         }}
                       />
                     </CTableDataCell>
-                    <CTableDataCell>{user.name}</CTableDataCell>
-                    <CTableDataCell>{user.email}</CTableDataCell>
+                    <CTableDataCell>
+                      {badge.badge || badge.title}
+                    </CTableDataCell>
+                    <CTableDataCell>{badge.url}</CTableDataCell>
                     <CTableDataCell>
                       <CContainer className="announcement-btn-container">
                         <CButton
                           className="my-3"
                           color="danger"
-                          onClick={() => removeUser(user._id)}
+                          onClick={() => removeUser(user._id, [badge._id])}
                         >
                           <FontAwesomeIcon icon={faTrash} />
                         </CButton>
@@ -121,4 +123,4 @@ function BadgeModal({ children, badge, removeUser }) {
     </>
   )
 }
-export default BadgeModal
+export default UserBadges

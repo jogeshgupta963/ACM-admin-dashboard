@@ -24,8 +24,12 @@ import {
   faCross,
   faXmark,
   faCheck,
+  faUser,
+  faIdBadge,
+  faCertificate,
 } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
+import { UserBadges } from '../components'
 
 function Users() {
   //hooks
@@ -37,6 +41,20 @@ function Users() {
     try {
       const { data } = await axios.get('/auth/user')
       setUsers(...users, data)
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
+  const removeUser = async (user_id, selectedUser) => {
+    try {
+      const { data } = await axios.put(
+        `/auth/remove/${user_id}?remove=badges`,
+        {
+          selectedElements: selectedUser,
+        },
+      )
+      if (!data) return console.log('error')
+      window.location.reload()
     } catch (err) {
       console.log(err.message)
     }
@@ -117,6 +135,29 @@ function Users() {
               {/* <CTableDataCell>{badge.content}</CTableDataCell> */}
               <CTableDataCell>
                 <CContainer className="announcement-btn-container">
+                  <UserBadges user={user} removeUser={removeUser}>
+                    <CButton
+                      className="my-3"
+                      color="danger"
+                      // onClick={() => deleteHandle(badge._id)}
+                    >
+                      <FontAwesomeIcon icon={faIdBadge} />
+                    </CButton>
+                  </UserBadges>
+
+                  <UserBadges
+                    user={user}
+                    type="Certificates"
+                    removeUser={removeUser}
+                  >
+                    <CButton
+                      className="my-3"
+                      color="danger"
+                      // onClick={() => deleteHandle(badge._id)}
+                    >
+                      <FontAwesomeIcon icon={faCertificate} />
+                    </CButton>
+                  </UserBadges>
                   <CButton
                     className="my-3"
                     color="danger"

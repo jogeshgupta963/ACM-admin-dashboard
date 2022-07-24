@@ -22,22 +22,22 @@ import {
   CFormCheck,
 } from '@coreui/react'
 
-function BadgeEdit() {
+function CertificateEdit() {
   //hooks
   const navigate = useNavigate()
   const [isEdit] = useSearchParams()
   const { id } = useParams()
-  const badge = useRef('')
-  const description = useRef('')
+
+  const title = useRef('')
   const url = useRef('')
   const search = useRef('')
   const [toggleList, setToggleList] = useState(false)
   const [selectedUsers, setSelectedUser] = useState([])
   const [allUsers, setAllUsers] = useState([])
-  const [badgeUsers, setBadgeUsers] = useState([])
+  const [certificateUsers, setCertificateUsers] = useState([])
 
   useEffect(() => {
-    fetchBadgeUsers()
+    fetchCertificateUsers()
   }, [id])
 
   //function
@@ -48,18 +48,20 @@ function BadgeEdit() {
         `/auth/user?search=${search.current.value}`,
       )
       if (!data) throw new Error('users not found')
-      data = data.filter((user) => !badgeUsers.includes(user._id.toString()))
+      data = data.filter(
+        (user) => !certificateUsers.includes(user._id.toString()),
+      )
       setAllUsers(() => data)
     } catch (err) {
       console.log(err)
     }
   }
 
-  const fetchBadgeUsers = async () => {
+  const fetchCertificateUsers = async () => {
     try {
-      const { data } = await axios.get(`/badge/${id}`)
-      if (!data) throw new Error('badge not found')
-      setBadgeUsers(() => data.user.map((user) => user._id))
+      const { data } = await axios.get(`/certificate/${id}`)
+      if (!data) throw new Error('certificate not found')
+      setCertificateUsers(() => data.user.map((user) => user._id))
     } catch (err) {
       console.log(err.message)
     }
@@ -68,9 +70,8 @@ function BadgeEdit() {
   const submitHandle = async (e) => {
     e.preventDefault()
     try {
-      const { data } = await axios.put(`/badge/${id}`, {
-        badge: badge.current.value || undefined,
-        description: description.current.value || undefined,
+      const { data } = await axios.put(`/certificate/${id}`, {
+        title: title.current.value || undefined,
         url: url.current.value || undefined,
         user: selectedUsers || undefined,
       })
@@ -79,7 +80,7 @@ function BadgeEdit() {
         console.log('error')
         return
       }
-      navigate('/admin/badges')
+      navigate('/admin/certificates')
     } catch (err) {
       console.log(err.message)
     }
@@ -90,26 +91,15 @@ function BadgeEdit() {
       <CRow className="justify-content-md-center">
         <CCol xs={12} md={6}>
           <h1 className="mt-2 text-center">
-            {isEdit.get('edit') ? 'Edit' : 'Create'} Badges
+            {isEdit.get('edit') ? 'Edit' : 'Create'} Certificates
           </h1>
           <CForm>
             <CInputGroup className="mb-3">
               <CInputGroupText id="inputGroup-sizing-default">
-                Badge
+                title
               </CInputGroupText>
               <CFormInput
-                ref={badge}
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
-              />
-            </CInputGroup>
-
-            <CInputGroup className="mb-3">
-              <CInputGroupText id="inputGroup-sizing-default">
-                Description
-              </CInputGroupText>
-              <CFormInput
-                ref={description}
+                ref={title}
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
               />
@@ -174,4 +164,4 @@ function BadgeEdit() {
   )
 }
 
-export default BadgeEdit
+export default CertificateEdit
