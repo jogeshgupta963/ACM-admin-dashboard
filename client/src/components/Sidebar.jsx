@@ -6,11 +6,11 @@ import {
   CNavItem,
   CImage,
   CNavTitle,
-} from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import sidebarLogo from "../images/acm.png";
-import { cilMic, cilBadge, cilVideo, cilUser, cilCash } from "@coreui/icons";
-import { Link } from "react-router-dom";
+} from '@coreui/react'
+import CIcon from '@coreui/icons-react'
+import sidebarLogo from '../images/acm.png'
+import { cilMic, cilBadge, cilVideo, cilUser, cilCash } from '@coreui/icons'
+import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
   return (
@@ -28,30 +28,33 @@ const Sidebar = () => {
         </CSidebarBrand>
         <CSidebarNav>
           <CNavTitle>Features</CNavTitle>
-          <CNavItem href="#">
+          <CNavItem href="/admin/announcement">
             <CIcon customClassName="nav-icon" icon={cilMic} />
-            <Link to="/admin/announcement">Announcement</Link>
+            {/* <Link to="/admin/announcement" disabled> */}
+            Announcement
+            {/* </Link> */}
           </CNavItem>
-          <CNavItem href="#">
+          <CNavItem href="/admin/badges">
             <CIcon customClassName="nav-icon" icon={cilBadge} />
+            {/* <Link to="/admin/badges">Badges</Link> */}
             Badges
           </CNavItem>
-          <CNavItem href="#">
+          <CNavItem href="/admin/videos">
             <CIcon customClassName="nav-icon" icon={cilVideo} />
             Videos
           </CNavItem>
-          <CNavItem href="#">
+          <CNavItem href="/admin/users">
             <CIcon customClassName="nav-icon" icon={cilUser} />
-            Update User Input
+            Users
           </CNavItem>
-          <CNavItem href="#">
+          <CNavItem href="/admin/certificates">
             <CIcon customClassName="nav-icon" icon={cilCash} />
             Certificates
           </CNavItem>
         </CSidebarNav>
       </CSidebar>
     </CCol>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar
