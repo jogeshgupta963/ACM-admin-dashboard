@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from "react";
 import {
   CRow,
   CCol,
@@ -10,51 +10,53 @@ import {
   CTableHeaderCell,
   CTableBody,
   CTableDataCell,
-} from '@coreui/react'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import Header from '../components/Header'
-import '../index.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons'
+} from "@coreui/react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Header from "../components/Header";
+import "../index.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 function Announcement() {
-  const navigate = useNavigate()
-  const [announcements, setAnnouncements] = React.useState([])
+  const navigate = useNavigate();
+  const [announcements, setAnnouncements] = React.useState([]);
 
   //functions
   const createAnnouncementHandle = async () => {
-    const { data } = await axios.post('/announcement', {
-      heading: 'Default',
-      content: 'Default',
-    })
-    if (!data) return console.log('error')
-    navigate(`/admin/announcement/edit/${data._id}`)
-  }
+    const { data } = await axios.post("/announcement", {
+      heading: "Default",
+      content: "Default",
+      Venue: "Default",
+      date: "Default",
+    });
+    if (!data) return console.log("error");
+    navigate(`/admin/announcement/edit/${data._id}`);
+  };
   const deleteHandle = async (id) => {
     try {
-      const { data } = await axios.delete(`/announcement/${id}`)
+      const { data } = await axios.delete(`/announcement/${id}`);
 
-      if (!data) throw new Error('user not found')
+      if (!data) throw new Error("user not found");
 
       // setErr({ variant: 'success', msg: 'Product Deleted' })
 
-      window.location.reload()
+      window.location.reload();
     } catch (error) {
       // setErr({ variant: 'danger', msg: error.message })
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   const fetchAnnouncements = async () => {
-    const { data } = await axios.get('/announcement')
+    const { data } = await axios.get("/announcement");
 
-    setAnnouncements(...announcements, data)
-  }
+    setAnnouncements(...announcements, data);
+  };
 
   useEffect(() => {
-    fetchAnnouncements()
-  }, [])
+    fetchAnnouncements();
+  }, []);
 
   return (
     <CContainer>
@@ -62,7 +64,7 @@ function Announcement() {
         <CCol xs="12">
           <Header text="Announcement" />
         </CCol>
-        <CCol style={{ textAlign: 'right' }}>
+        <CCol style={{ textAlign: "right" }}>
           <CButton
             className="my-3"
             color="primary"
@@ -82,13 +84,15 @@ function Announcement() {
       >
         <CTableHead>
           <CTableRow
-            style={{ backgroundColor: 'rgba(85, 150, 230, 1)', color: 'white' }}
+            style={{ backgroundColor: "rgba(85, 150, 230, 1)", color: "white" }}
           >
             <CTableHeaderCell>Id</CTableHeaderCell>
             <CTableHeaderCell>Heading</CTableHeaderCell>
             <CTableHeaderCell>Type</CTableHeaderCell>
             <CTableHeaderCell>Year</CTableHeaderCell>
             <CTableHeaderCell>Content</CTableHeaderCell>
+            <CTableHeaderCell>Venue</CTableHeaderCell>
+            <CTableHeaderCell>Date</CTableHeaderCell>
             <CTableHeaderCell></CTableHeaderCell>
           </CTableRow>
         </CTableHead>
@@ -100,6 +104,8 @@ function Announcement() {
               <CTableDataCell>{announcement.type}</CTableDataCell>
               <CTableDataCell>{announcement.year}</CTableDataCell>
               <CTableDataCell>{announcement.content}</CTableDataCell>
+              <CTableDataCell>{announcement.venue}</CTableDataCell>
+              <CTableDataCell>{announcement.date}</CTableDataCell>
               <CTableDataCell>
                 <CContainer className="announcement-btn-container">
                   <CButton
@@ -115,8 +121,8 @@ function Announcement() {
                     className="my-3"
                     onClick={() => {
                       navigate(
-                        `/admin/announcement/edit/${announcement._id}?edit=true`,
-                      )
+                        `/admin/announcement/edit/${announcement._id}?edit=true`
+                      );
                     }}
                   >
                     <FontAwesomeIcon icon={faEdit} />
@@ -128,7 +134,7 @@ function Announcement() {
         </CTableBody>
       </CTable>
     </CContainer>
-  )
+  );
 }
 
-export default Announcement
+export default Announcement;

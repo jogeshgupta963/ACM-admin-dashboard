@@ -1,12 +1,12 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from "react";
 import {
   useParams,
   Navigate,
   Link,
   useNavigate,
   useSearchParams,
-} from 'react-router-dom'
-import axios from 'axios'
+} from "react-router-dom";
+import axios from "axios";
 import {
   CRow,
   CCol,
@@ -21,32 +21,36 @@ import {
   CDropdownMenu,
   CDropdownItem,
   CDropdownDivider,
-} from '@coreui/react'
+} from "@coreui/react";
 function AnnouncementUpdate() {
   //hooks
-  const [isEdit] = useSearchParams()
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const heading = useRef('')
-  const type = useRef('')
-  const year = useRef('')
-  const content = useRef('')
+  const [isEdit] = useSearchParams();
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const heading = useRef("");
+  const type = useRef("");
+  const venue = useRef("");
+  const date = useRef("");
+  const year = useRef("");
+  const content = useRef("");
   //functions
   const submitHandle = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const { data } = await axios.put(`/announcement/${id}`, {
         heading: heading.current.value || undefined,
         type: type.current.value || undefined,
         year: year.current.value || undefined,
         content: content.current.value || undefined,
-      })
-      if (!data) return console.log('error')
-      navigate('/admin/announcement')
+        venue: venue.current.value || undefined,
+        date: date.current.value || undefined,
+      });
+      if (!data) return console.log("error");
+      navigate("/admin/announcement");
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   return (
     <div>
@@ -54,7 +58,7 @@ function AnnouncementUpdate() {
         <CRow className="justify-content-md-center">
           <CCol xs={12} md={6}>
             <h1 className="mt-2 text-center">
-              {isEdit.get('edit') ? 'Edit' : 'Create'} Announcement
+              {isEdit.get("edit") ? "Edit" : "Create"} Announcement
             </h1>
             <CForm>
               <CInputGroup className="mb-3">
@@ -67,7 +71,7 @@ function AnnouncementUpdate() {
                   aria-describedby="inputGroup-sizing-default"
                 />
               </CInputGroup>
-              {/* 
+
               <CInputGroup className="mb-3">
                 <CInputGroupText id="inputGroup-sizing-default">
                   Type
@@ -77,7 +81,7 @@ function AnnouncementUpdate() {
                   aria-label="Sizing example input"
                   aria-describedby="inputGroup-sizing-default"
                 />
-              </CInputGroup> */}
+              </CInputGroup>
 
               <CInputGroup className="mb-3">
                 <CInputGroupText id="inputGroup-sizing-default">
@@ -85,6 +89,28 @@ function AnnouncementUpdate() {
                 </CInputGroupText>
                 <CFormInput
                   ref={year}
+                  aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-default"
+                />
+              </CInputGroup>
+
+              <CInputGroup className="mb-3">
+                <CInputGroupText id="inputGroup-sizing-default">
+                  Venue
+                </CInputGroupText>
+                <CFormInput
+                  ref={venue}
+                  aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-default"
+                />
+              </CInputGroup>
+
+              <CInputGroup className="mb-3">
+                <CInputGroupText id="inputGroup-sizing-default">
+                  Date
+                </CInputGroupText>
+                <CFormInput
+                  ref={date}
                   aria-label="Sizing example input"
                   aria-describedby="inputGroup-sizing-default"
                 />
@@ -102,14 +128,14 @@ function AnnouncementUpdate() {
               </CInputGroup>
 
               <CButton onClick={submitHandle} color="primary" type="submit">
-                {isEdit.get('edit') ? 'Update' : 'Create'}
+                {isEdit.get("edit") ? "Update" : "Create"}
               </CButton>
             </CForm>
           </CCol>
         </CRow>
       </CContainer>
     </div>
-  )
+  );
 }
 
-export default AnnouncementUpdate
+export default AnnouncementUpdate;
