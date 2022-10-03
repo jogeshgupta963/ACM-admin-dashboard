@@ -1,12 +1,12 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from "react";
 import {
   useParams,
   Navigate,
   Link,
   useNavigate,
   useSearchParams,
-} from 'react-router-dom'
-import axios from 'axios'
+} from "react-router-dom";
+import axios from "axios";
 import {
   CRow,
   CCol,
@@ -16,59 +16,59 @@ import {
   CFormInput,
   CInputGroup,
   CInputGroupText,
-} from '@coreui/react'
+} from "@coreui/react";
 
 function UserEdit() {
   //function
 
   //hooks
-  const navigate = useNavigate()
-  const [isEdit] = useSearchParams()
-  const { id } = useParams()
+  const navigate = useNavigate();
+  const [isEdit] = useSearchParams();
+  const { id } = useParams();
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [department, setDepartment] = useState('')
-  const [admin, setAdmin] = useState(true)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [department, setDepartment] = useState("");
+  const [admin, setAdmin] = useState();
   useEffect(() => {
-    fetchUser()
-  })
+    fetchUser();
+  });
   const fetchUser = async () => {
     try {
-      const { data } = await axios.get(`/auth/user/${id}`)
+      const { data } = await axios.get(`/auth/user/${id}`);
 
-      if (!data) throw new Error('user not found')
-      setName(data.name)
-      setEmail(data.email)
-      setDepartment(data.department)
-      setAdmin(data.isAdmin)
+      if (!data) throw new Error("user not found");
+      setName(data.name);
+      setEmail(data.email);
+      setDepartment(data.department);
+      setAdmin(data.isAdmin);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   const submitHandle = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      console.log(name, email, department, admin)
-      const { data } = await axios.put(`/auth/user/${id}`, {
-        name: name || undefined,
-        email: email || undefined,
-        department: department || undefined,
-        isAdmin: admin || false,
-      })
-      if (!data) return console.log('error')
-      navigate('/admin/users')
+      console.log(name, email, department, admin);
+      // const { data } = await axios.put(`/auth/user/${id}`, {
+      //   name: name || undefined,
+      //   email: email || undefined,
+      //   department: department || undefined,
+      //   isAdmin: admin || false,
+      // })
+      // if (!data) return console.log('error')
+      // navigate("/admin/users");
     } catch (err) {
-      console.log(err.message)
+      console.log(err.message);
     }
-  }
+  };
   return (
     <CContainer>
       <CRow className="justify-content-md-center">
         <CCol xs={12} md={6}>
           <h1 className="mt-2 text-center">
-            {isEdit.get('edit') ? 'Edit' : 'Create'} User
+            {isEdit.get("edit") ? "Edit" : "Create"} User
           </h1>
           <CForm>
             <CInputGroup className="mb-3">
@@ -113,21 +113,22 @@ function UserEdit() {
             <input
               type="checkbox"
               className="ms-4 form-check-input"
-              checked
               onChange={(e) => {
-                setAdmin(!admin)
+                // console.log(e.target.checked);
+                console.log(admin);
+                setAdmin(e.target.checked);
               }}
             />
             {/* </CInputGroup> */}
 
             <CButton onClick={submitHandle} color="primary" type="submit">
-              {isEdit.get('edit') ? 'Update' : 'Create'}
+              {isEdit.get("edit") ? "Update" : "Create"}
             </CButton>
           </CForm>
         </CCol>
       </CRow>
     </CContainer>
-  )
+  );
 }
 
-export default UserEdit
+export default UserEdit;
