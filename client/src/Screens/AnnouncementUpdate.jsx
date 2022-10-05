@@ -1,8 +1,7 @@
-import { useEffect, useState, useRef } from "react";
+import { useRef } from "react";
 import {
   useParams,
   Navigate,
-  Link,
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
@@ -16,12 +15,9 @@ import {
   CFormInput,
   CInputGroup,
   CInputGroupText,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownItem,
-  CDropdownDivider,
 } from "@coreui/react";
+import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
 function AnnouncementUpdate() {
   //hooks
   const [isEdit] = useSearchParams();
@@ -33,6 +29,8 @@ function AnnouncementUpdate() {
   const date = useRef("");
   const year = useRef("");
   const content = useRef("");
+  const { user } = useSelector((state) => state.user);
+
   //functions
   const submitHandle = async (e) => {
     e.preventDefault();
@@ -53,88 +51,93 @@ function AnnouncementUpdate() {
   };
 
   return (
-    <div>
-      <CContainer>
-        <CRow className="justify-content-md-center">
-          <CCol xs={12} md={6}>
-            <h1 className="mt-2 text-center">
-              {isEdit.get("edit") ? "Edit" : "Create"} Announcement
-            </h1>
-            <CForm>
-              <CInputGroup className="mb-3">
-                <CInputGroupText id="inputGroup-sizing-default">
-                  Heading
-                </CInputGroupText>
-                <CFormInput
-                  ref={heading}
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                />
-              </CInputGroup>
+    <>
+      {!Cookies.get("ACM_THAPAR") && user.isAdmin && (
+        <Navigate to="google.com" />
+      )}
+      <div>
+        <CContainer>
+          <CRow className="justify-content-md-center">
+            <CCol xs={12} md={6}>
+              <h1 className="mt-2 text-center">
+                {isEdit.get("edit") ? "Edit" : "Create"} Announcement
+              </h1>
+              <CForm>
+                <CInputGroup className="mb-3">
+                  <CInputGroupText id="inputGroup-sizing-default">
+                    Heading
+                  </CInputGroupText>
+                  <CFormInput
+                    ref={heading}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default"
+                  />
+                </CInputGroup>
 
-              <CInputGroup className="mb-3">
-                <CInputGroupText id="inputGroup-sizing-default">
-                  Type
-                </CInputGroupText>
-                <CFormInput
-                  ref={type}
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                />
-              </CInputGroup>
+                <CInputGroup className="mb-3">
+                  <CInputGroupText id="inputGroup-sizing-default">
+                    Type
+                  </CInputGroupText>
+                  <CFormInput
+                    ref={type}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default"
+                  />
+                </CInputGroup>
 
-              <CInputGroup className="mb-3">
-                <CInputGroupText id="inputGroup-sizing-default">
-                  Year
-                </CInputGroupText>
-                <CFormInput
-                  ref={year}
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                />
-              </CInputGroup>
+                <CInputGroup className="mb-3">
+                  <CInputGroupText id="inputGroup-sizing-default">
+                    Year
+                  </CInputGroupText>
+                  <CFormInput
+                    ref={year}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default"
+                  />
+                </CInputGroup>
 
-              <CInputGroup className="mb-3">
-                <CInputGroupText id="inputGroup-sizing-default">
-                  Venue
-                </CInputGroupText>
-                <CFormInput
-                  ref={venue}
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                />
-              </CInputGroup>
+                <CInputGroup className="mb-3">
+                  <CInputGroupText id="inputGroup-sizing-default">
+                    Venue
+                  </CInputGroupText>
+                  <CFormInput
+                    ref={venue}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default"
+                  />
+                </CInputGroup>
 
-              <CInputGroup className="mb-3">
-                <CInputGroupText id="inputGroup-sizing-default">
-                  Date
-                </CInputGroupText>
-                <CFormInput
-                  ref={date}
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                />
-              </CInputGroup>
+                <CInputGroup className="mb-3">
+                  <CInputGroupText id="inputGroup-sizing-default">
+                    Date
+                  </CInputGroupText>
+                  <CFormInput
+                    ref={date}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default"
+                  />
+                </CInputGroup>
 
-              <CInputGroup className="mb-3">
-                <CInputGroupText id="inputGroup-sizing-default">
-                  Content
-                </CInputGroupText>
-                <CFormInput
-                  ref={content}
-                  aria-label="Sizing example input"
-                  aria-describedby="inputGroup-sizing-default"
-                />
-              </CInputGroup>
+                <CInputGroup className="mb-3">
+                  <CInputGroupText id="inputGroup-sizing-default">
+                    Content
+                  </CInputGroupText>
+                  <CFormInput
+                    ref={content}
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default"
+                  />
+                </CInputGroup>
 
-              <CButton onClick={submitHandle} color="primary" type="submit">
-                {isEdit.get("edit") ? "Update" : "Create"}
-              </CButton>
-            </CForm>
-          </CCol>
-        </CRow>
-      </CContainer>
-    </div>
+                <CButton onClick={submitHandle} color="primary" type="submit">
+                  {isEdit.get("edit") ? "Update" : "Create"}
+                </CButton>
+              </CForm>
+            </CCol>
+          </CRow>
+        </CContainer>
+      </div>
+    </>
   );
 }
 
