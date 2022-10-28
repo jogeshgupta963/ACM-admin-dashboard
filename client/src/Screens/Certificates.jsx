@@ -11,9 +11,7 @@ import {
   CTableBody,
   CTableDataCell,
 } from "@coreui/react";
-import { cilMic, cilBadge, cilVideo, cilUser, cilCash } from "@coreui/icons";
-import CIcon from "@coreui/icons-react";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../components/Header";
